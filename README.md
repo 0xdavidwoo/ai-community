@@ -1,21 +1,43 @@
-# Basic Next.js Project
+# AI Community MVP
 
-This repository contains a minimal Next.js project scaffold.
+Next.js + Tailwind MVP featuring:
 
-## Included files
+- Homepage feed with category filters, article cards, editor summaries, bookmarking, and load-more pagination
+- Article detail page (`/article/[id]`)
+- Login page (`/login`) with Supabase auth
+- Profile page (`/profile`) with bookmarks and read history
+- Mobile-first responsive layout
 
-- `package.json`
-- `pages/index.tsx`
-- `README.md`
+## Setup
 
-## Getting started
-
-1. Install dependencies:
+1. Install dependencies
    ```bash
    npm install
    ```
-2. Start the development server:
+2. Add environment variables
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=your_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   ```
+3. Run dev server
    ```bash
    npm run dev
    ```
-3. Open [http://localhost:3000](http://localhost:3000).
+
+## Suggested Supabase tables
+
+```sql
+create table bookmarks (
+  user_id uuid not null,
+  article_id text not null,
+  created_at timestamptz default now(),
+  primary key (user_id, article_id)
+);
+
+create table read_history (
+  user_id uuid not null,
+  article_id text not null,
+  read_at timestamptz default now(),
+  primary key (user_id, article_id)
+);
+```
