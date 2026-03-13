@@ -58,8 +58,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>AI Community Feed</title>
-        <meta name="description" content="AI community content aggregation platform" />
+        <title>AI Forge Feed</title>
+        <meta name="description" content="AI Forge (造物社) content aggregation platform" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
@@ -67,7 +67,7 @@ export default function Home() {
         <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
             <Link href="/" className="text-lg font-bold text-indigo-700">
-              AI Community
+              AI Forge
             </Link>
 
             <nav className="order-3 w-full overflow-x-auto sm:order-2 sm:w-auto">

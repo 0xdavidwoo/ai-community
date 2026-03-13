@@ -1,6 +1,6 @@
-# AI Community Content Aggregation MVP
+# AI Forge (造物社) Content Aggregation MVP
 
-This project is a mobile-first MVP built with **Next.js + Tailwind CSS**, structured as an AI community content platform (not a tools directory).
+This project is a mobile-first MVP built with **Next.js + Tailwind CSS**, structured as the **AI Forge (造物社)** content platform (not a tools directory).
 
 ## Pages
 
