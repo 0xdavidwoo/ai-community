@@ -1,8 +1,8 @@
 {
-  "name": "ai-community",
+  "name": "ai-forge",
   "version": "1.0.0",
   "private": true,
-  "description": "AI community content aggregation platform MVP",
+  "description": "AI Forge (造物社) content aggregation platform MVP",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
