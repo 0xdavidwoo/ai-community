@@ -1,21 +1,25 @@
-# Basic Next.js Project
+# AI Community Content Aggregation MVP
 
-This repository contains a minimal Next.js project scaffold.
+This project is a mobile-first MVP built with **Next.js + Tailwind CSS**, structured as an AI community content platform (not a tools directory).
 
-## Included files
+## Pages
 
-- `package.json`
-- `pages/index.tsx`
-- `README.md`
+- `/` homepage feed with category filters, article cards, and load more
+- `/article/[id]` article detail page
+- `/profile` personal center page
+- `/login` phone login page
 
-## Getting started
+## Supabase setup
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Start the development server:
-   ```bash
-   npm run dev
-   ```
-3. Open [http://localhost:3000](http://localhost:3000).
+The codebase includes a lightweight Supabase REST helper in `lib/supabase.ts`.
+To connect real data, configure:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+## Local development
+
+```bash
+npm install
+npm run dev
+```
