@@ -1,8 +1,15 @@
 {
+codex/build-complete-mvp-for-ai-community-platform
   "name": "ai-community",
   "version": "1.0.0",
   "private": true,
   "description": "AI community MVP built with Next.js + Tailwind + Supabase",
+
+  "name": "ai-forge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Forge (造物社) content aggregation platform MVP",
+main
   "scripts": {
     "dev": "next dev",
     "build": "next build",
