@@ -5,8 +5,8 @@ export default function LoginPage() {
   return (
     <>
       <Head>
-        <title>Login | AI Community</title>
-        <meta name="description" content="Phone login for AI community platform" />
+        <title>Login | AI Forge</title>
+        <meta name="description" content="Phone login for AI Forge (造物社) platform" />
       </Head>
       <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 sm:px-6">
         <section className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">

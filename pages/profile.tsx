@@ -5,8 +5,8 @@ export default function ProfilePage() {
   return (
     <>
       <Head>
-        <title>Profile | AI Community</title>
-        <meta name="description" content="Personal center for AI community members" />
+        <title>Profile | AI Forge</title>
+        <meta name="description" content="Personal center for AI Forge (造物社) members" />
       </Head>
       <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 sm:px-6 sm:py-12">
         <section className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
