@@ -24,7 +24,7 @@ export default function ArticleDetailPage() {
   return (
     <>
       <Head>
-        <title>{article.title} | AI Community</title>
+        <title>{article.title} | AI Forge</title>
         <meta name="description" content={article.summary} />
       </Head>
 
