@@ -1,169 +1,94 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-type Section = {
-  id: string;
+type Pillar = {
   title: string;
-  description: string;
-  tags: string[];
+  summary: string;
+  metrics: string;
 };
 
-const sections: Array<{ name: string; items: Section[] }> = [
+const pillars: Pillar[] = [
   {
-    name: 'AI News',
-    items: [
-      {
-        id: 'news-1',
-        title: 'Weekly Frontier Model Briefing',
-        description: 'A fast roundup of major model launches, open benchmarks, and notable research papers this week.',
-        tags: ['Weekly', 'Research', 'Trends']
-      },
-      {
-        id: 'news-2',
-        title: 'Policy & Regulation Radar',
-        description: 'Track AI policy movements and understand how they affect builders, startups, and creators.',
-        tags: ['Policy', 'Global', 'Analysis']
-      }
-    ]
+    title: 'AI News Radar',
+    summary: 'Daily intelligence on model launches, research breakthroughs, and policy moves that matter to builders.',
+    metrics: 'Daily digest · 5 min read'
   },
   {
-    name: 'AI Products',
-    items: [
-      {
-        id: 'products-1',
-        title: 'Creator Toolkit Index',
-        description: 'A curated list of tools for writing, image generation, coding, and multilingual publishing workflows.',
-        tags: ['Productivity', 'Curation', 'Workflow']
-      },
-      {
-        id: 'products-2',
-        title: 'Launch Watchlist',
-        description: 'Discover newly shipped AI products with concise reviews, use cases, and pricing snapshots.',
-        tags: ['Launches', 'Reviews', 'Pricing']
-      }
-    ]
+    title: 'Product & Tool Atlas',
+    summary: 'Curated stacks for creators and teams: compare tools, pricing, and best-fit workflows in one place.',
+    metrics: '300+ tools tracked'
   },
   {
-    name: 'AI Projects',
-    items: [
-      {
-        id: 'projects-1',
-        title: 'Open Community Builds',
-        description: 'Follow practical projects from the AI Forge community with architecture notes and learnings.',
-        tags: ['Open Source', 'Case Study', 'Community']
-      },
-      {
-        id: 'projects-2',
-        title: 'From Idea to MVP',
-        description: 'Step-by-step implementation diaries showing how teams ship AI products quickly and responsibly.',
-        tags: ['MVP', 'Engineering', 'Roadmap']
-      }
-    ]
+    title: 'Builder Showcases',
+    summary: 'Real projects from the community with architecture notes, launch retrospectives, and reusable playbooks.',
+    metrics: 'Weekly ship stories'
   },
   {
-    name: 'AI Creators',
-    items: [
-      {
-        id: 'creators-1',
-        title: 'Creator Spotlight',
-        description: 'Interviews with standout creators sharing their prompt systems, publishing rhythm, and growth tips.',
-        tags: ['Interview', 'Creator Economy', 'Growth']
-      },
-      {
-        id: 'creators-2',
-        title: 'Studio Playbooks',
-        description: 'Battle-tested playbooks for running solo or small AI creator studios with consistent quality output.',
-        tags: ['Playbook', 'Operations', 'Content']
-      }
-    ]
-  },
-  {
-    name: 'AI Experiments',
-    items: [
-      {
-        id: 'experiments-1',
-        title: 'Prompt Lab',
-        description: 'Explore controlled prompt experiments with clear setup, result logs, and reusable templates.',
-        tags: ['Prompting', 'Evaluation', 'Templates']
-      },
-      {
-        id: 'experiments-2',
-        title: 'Creative Model Challenges',
-        description: 'Monthly challenges designed to test multimodal capabilities through real creative constraints.',
-        tags: ['Multimodal', 'Challenge', 'Showcase']
-      }
-    ]
+    title: 'Creator Studio',
+    summary: 'Interviews and systems from AI-first creators scaling output with quality and consistency.',
+    metrics: 'Templates + SOPs'
   }
 ];
-
-function SectionCard({ item }: { item: Section }) {
-  return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{item.title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{item.description}</p>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {item.tags.map((tag) => (
-          <span key={tag} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
-            {tag}
-          </span>
-        ))}
-      </div>
-    </article>
-  );
-}
 
 export default function HomePage() {
   return (
     <>
       <Head>
-        <title>AI Forge (造物社)</title>
+        <title>AI Forge (造物社) · Build the Future with AI</title>
         <meta
           name="description"
-          content="AI Forge (造物社): discover AI News, Products, Projects, Creators, and Experiments in one modern community hub."
+          content="AI Forge is the modern home for AI news, tools, projects, and creators. Discover what to build next."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <main className="min-h-screen bg-slate-50 text-slate-900">
-        <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-            <div>
-              <p className="text-sm font-semibold text-indigo-700">AI Forge (造物社)</p>
-              <h1 className="text-xl font-bold sm:text-2xl">Build, Discover, and Create with AI</h1>
+      <main className="min-h-screen bg-slate-950 text-slate-100">
+        <section className="relative overflow-hidden border-b border-slate-800">
+          <div className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-indigo-500/30 blur-3xl" aria-hidden />
+          <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">AI Forge (造物社)</p>
+            <h1 className="mt-4 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl">
+              The AI Forge homepage for builders, creators, and curious minds.
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+              Stay ahead with signal-rich AI coverage, practical product intelligence, and a community focused on
+              shipping real outcomes.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/login"
+                className="rounded-lg bg-indigo-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400"
+              >
+                Join AI Forge
+              </Link>
+              <a
+                href="#pillars"
+                className="rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-slate-500"
+              >
+                Explore pillars
+              </a>
             </div>
-            <Link
-              href="/login"
-              className="rounded-lg border border-indigo-200 px-3 py-2 text-sm font-medium text-indigo-700 transition hover:bg-indigo-50"
-            >
-              Join
-            </Link>
           </div>
-        </header>
+        </section>
 
-        <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-          <p className="max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-            A modern, mobile-first homepage for the AI community. Explore curated updates and practical resources across
-            five core sections.
-          </p>
+        <section id="pillars" className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+          <div className="mb-8 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-semibold text-white sm:text-3xl">What you get inside AI Forge</h2>
+              <p className="mt-2 text-sm text-slate-400 sm:text-base">A focused operating system for navigating the AI era.</p>
+            </div>
+            <span className="rounded-full border border-emerald-500/50 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+              Updated weekly
+            </span>
+          </div>
 
-          <div className="mt-8 space-y-10">
-            {sections.map((section) => (
-              <section key={section.name}>
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-semibold sm:text-xl">{section.name}</h2>
-                  <button
-                    type="button"
-                    className="rounded-full bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
-                  >
-                    View all
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {section.items.map((item) => (
-                    <SectionCard key={item.id} item={item} />
-                  ))}
-                </div>
-              </section>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {pillars.map((pillar) => (
+              <article key={pillar.title} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+                <h3 className="text-xl font-semibold text-white">{pillar.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{pillar.summary}</p>
+                <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-indigo-300">{pillar.metrics}</p>
+              </article>
             ))}
           </div>
         </section>
