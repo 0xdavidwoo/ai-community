@@ -1,3 +1,14 @@
+codex/build-complete-mvp-for-ai-community-platform
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+export default function ToolsRedirectPage() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace('/');
+  }, [router]);
+  return null;
+
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -20,4 +31,5 @@ export default function LegacyRouteNotice() {
       </main>
     </>
   );
+main
 }
