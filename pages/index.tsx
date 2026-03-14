@@ -64,17 +64,27 @@ export default function HomePage() {
           <h2 className="text-2xl font-bold text-white sm:text-3xl">AI Capabilities</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {capabilities.map((capability) => (
-              <Link
+              <div
                 key={capability.title}
-                href={capability.href}
                 className="group rounded-xl border border-slate-800 bg-slate-900/60 p-5 transition hover:border-indigo-400/70 hover:bg-slate-900"
               >
                 <h3 className="text-lg font-semibold text-white group-hover:text-indigo-300">{capability.title}</h3>
                 <p className="mt-2 text-sm text-slate-300">{capability.description}</p>
-                <span className="mt-4 inline-block text-sm font-medium text-indigo-300 group-hover:text-indigo-200">
-                  Explore →
-                </span>
-              </Link>
+                <div className="mt-4 flex items-center gap-3">
+                  <Link
+                    href="/ai-start"
+                    className="inline-flex items-center rounded-lg bg-indigo-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-400"
+                  >
+                    Try it
+                  </Link>
+                  <Link
+                    href={capability.href}
+                    className="inline-block text-sm font-medium text-indigo-300 transition hover:text-indigo-200"
+                  >
+                    Explore →
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         </section>
