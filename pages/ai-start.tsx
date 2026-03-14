@@ -27,6 +27,18 @@ type ProjectEvaluation = {
   recommendation: string;
 };
 
+type ContentStrategy = {
+  key_angle: string;
+  viral_structure: string;
+  suggested_titles: string[];
+};
+
+type ContentAnalysisResponse = {
+  core_viewpoint: string;
+  viral_structure_template: string;
+  titles: string[];
+};
+
 export default function AiStartPage() {
   const [idea, setIdea] = useState('');
   const [loading, setLoading] = useState(false);
@@ -36,6 +48,7 @@ export default function AiStartPage() {
   const [business, setBusiness] = useState<BusinessAnalysis | null>(null);
   const [website, setWebsite] = useState<WebsiteStructure | null>(null);
   const [projectScore, setProjectScore] = useState<ProjectEvaluation | null>(null);
+  const [contentStrategy, setContentStrategy] = useState<ContentStrategy | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -45,6 +58,7 @@ export default function AiStartPage() {
     setBusiness(null);
     setWebsite(null);
     setProjectScore(null);
+    setContentStrategy(null);
 
     try {
       const payload = JSON.stringify({ idea });
@@ -63,7 +77,9 @@ export default function AiStartPage() {
       }
       setProduct(productData);
 
-      const [businessResponse, websiteResponse, evaluationResponse] = await Promise.all([
+      const shouldGenerateContentStrategy = idea.trim().length > 0;
+
+      const [businessResponse, websiteResponse, evaluationResponse, contentResponse] = await Promise.all([
         fetch('/api/analyze-business', {
           method: 'POST',
           headers: {
@@ -84,7 +100,22 @@ export default function AiStartPage() {
             'Content-Type': 'application/json'
           },
           body: payload
-        })
+        }),
+        shouldGenerateContentStrategy
+          ? fetch('/api/analyze-content', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                article: [
+                  `Product idea: ${idea}`,
+                  `Product name: ${productData.product_name}`,
+                  `Core features: ${productData.core_features.join(', ')}`
+                ].join('\n')
+              })
+            })
+          : Promise.resolve(null)
       ]);
 
       const businessData = (await businessResponse.json()) as BusinessAnalysis | { error: string };
@@ -103,6 +134,15 @@ export default function AiStartPage() {
         throw new Error('error' in evaluationData ? evaluationData.error : 'Failed to evaluate project');
       }
 
+      if (contentResponse && contentResponse.ok) {
+        const contentData = (await contentResponse.json()) as ContentAnalysisResponse;
+        setContentStrategy({
+          key_angle: contentData.core_viewpoint,
+          viral_structure: contentData.viral_structure_template,
+          suggested_titles: contentData.titles
+        });
+      }
+
       setBusiness(businessData);
       setWebsite(websiteData);
       setProjectScore(evaluationData);
@@ -111,6 +151,7 @@ export default function AiStartPage() {
       setBusiness(null);
       setWebsite(null);
       setProjectScore(null);
+      setContentStrategy(null);
 
       if (submitError instanceof Error) {
         setError(submitError.message);
@@ -139,7 +180,7 @@ export default function AiStartPage() {
           <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl">One idea, full startup snapshot</h1>
           <p className="mt-3 text-sm text-slate-300 sm:text-base">
             Enter a single idea and the system will generate your product concept, business model, website structure,
-            and project score.
+            project score, and optional content strategy.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
@@ -282,6 +323,42 @@ export default function AiStartPage() {
                   <p className="mt-1 text-base font-medium text-white">{projectScore.recommendation}</p>
                 </div>
               </article>
+
+              {contentStrategy ? (
+                <article className="rounded-xl border border-slate-800 bg-slate-950/70 p-5">
+                  <h2 className="text-xl font-semibold text-white">Content Strategy</h2>
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <h3 className="text-xs uppercase tracking-wide text-slate-400">Key angle</h3>
+                      <p className="mt-1 rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200">
+                        {contentStrategy.key_angle || 'No key angle generated.'}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="text-xs uppercase tracking-wide text-slate-400">Viral structure</h3>
+                      <p className="mt-1 rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200">
+                        {contentStrategy.viral_structure || 'No viral structure generated.'}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="text-xs uppercase tracking-wide text-slate-400">Suggested titles</h3>
+                      <ul className="mt-2 space-y-2 text-sm text-slate-200">
+                        {contentStrategy.suggested_titles.length > 0 ? (
+                          contentStrategy.suggested_titles.map((title) => (
+                            <li key={title} className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2">
+                              {title}
+                            </li>
+                          ))
+                        ) : (
+                          <li className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-slate-400">
+                            No suggested titles generated.
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </article>
+              ) : null}
             </div>
           ) : null}
         </section>
