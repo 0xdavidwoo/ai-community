@@ -29,4 +29,10 @@
     ]
   },
   "ampFirstPages": []
+}  "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/article/[id].js"
+    ]
+  },
+  "ampFirstPages": []
 }
