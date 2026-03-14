@@ -8,45 +8,94 @@ type RecommendToolsResponse = {
   }>;
 };
 
-const getRecommendedTools = (task: string): RecommendToolsResponse['tools'] => {
-  const normalizedTask = task.toLowerCase();
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+const OPENAI_MODEL = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
 
-  if (normalizedTask.includes('writing')) {
-    return [
-      { name: 'ChatGPT', description: 'Versatile AI assistant for drafting and editing copy' },
-      { name: 'Claude', description: 'Strong long-form writing and document summarization assistant' },
-      { name: 'Notion AI', description: 'Writing support directly inside your notes and docs workspace' }
-    ];
-  }
-
-  if (normalizedTask.includes('image')) {
-    return [
-      { name: 'Midjourney', description: 'Text-to-image tool for stylized visual generation' },
-      { name: 'DALL-E', description: 'Image generation model for creating visuals from prompts' },
-      { name: 'Stable Diffusion', description: 'Open-source image model with high customization flexibility' }
-    ];
-  }
-
-  if (normalizedTask.includes('video')) {
-    return [
-      { name: 'Runway', description: 'AI video editing and generation platform for creators' },
-      { name: 'Pika', description: 'Prompt-based tool for generating short AI videos' },
-      { name: 'CapCut AI', description: 'Consumer-friendly video editor with built-in AI effects' }
-    ];
-  }
-
-  if (normalizedTask.includes('website')) {
-    return [
-      { name: 'Next.js', description: 'React framework for building websites' },
-      { name: 'Vercel', description: 'Platform to deploy frontend apps' },
-      { name: 'Supabase', description: 'Open-source backend and database' }
-    ];
-  }
-
-  return [];
+type OpenAIResponse = {
+  choices?: Array<{
+    message?: {
+      content?: string | null;
+    };
+  }>;
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<RecommendToolsResponse | { error: string }>) {
+const getRecommendedTools = async (task: string): Promise<RecommendToolsResponse['tools']> => {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY is not configured');
+  }
+
+  const prompt = [
+    'You are an AI tool advisor.',
+    `User task: ${task}`,
+    '',
+    'Return JSON only using this exact schema:',
+    '{',
+    '  "tools": [',
+    '    {',
+    '      "name": "string",',
+    '      "description": "string"',
+    '    }',
+    '  ]',
+    '}',
+    '',
+    'Rules:',
+    '- Return 3 relevant tools when possible.',
+    '- Keep each description concise (one sentence).',
+    '- Do not include markdown fences or additional text.'
+  ].join('\n');
+
+  const openAiResponse = await fetch(OPENAI_API_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: OPENAI_MODEL,
+      temperature: 0.3,
+      messages: [
+        {
+          role: 'system',
+          content: 'You recommend software tools and must always return valid JSON only.'
+        },
+        {
+          role: 'user',
+          content: prompt
+        }
+      ]
+    })
+  });
+
+  if (!openAiResponse.ok) {
+    const errorText = await openAiResponse.text();
+    throw new Error(`OpenAI API request failed: ${openAiResponse.status} ${errorText}`);
+  }
+
+  const data = (await openAiResponse.json()) as OpenAIResponse;
+  const content = data.choices?.[0]?.message?.content;
+
+  if (!content) {
+    throw new Error('OpenAI API returned an empty response');
+  }
+
+  const parsed = JSON.parse(content) as { tools?: RecommendToolsResponse['tools'] };
+
+  if (!Array.isArray(parsed.tools)) {
+    throw new Error('OpenAI API returned an invalid tools payload');
+  }
+
+  return parsed.tools.filter(
+    (tool): tool is { name: string; description: string } =>
+      Boolean(tool) && typeof tool.name === 'string' && typeof tool.description === 'string'
+  );
+};
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<RecommendToolsResponse | { error: string }>
+) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed' });
@@ -58,8 +107,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Recomm
     return res.status(400).json({ error: 'task must be a non-empty string' });
   }
 
-  return res.status(200).json({
-    task,
-    tools: getRecommendedTools(task)
-  });
+  try {
+    const tools = await getRecommendedTools(task);
+
+    return res.status(200).json({
+      task,
+      tools
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return res.status(500).json({ error: `Failed to recommend tools: ${message}` });
+  }
 }
