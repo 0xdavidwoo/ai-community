@@ -64,7 +64,7 @@ export default function HomePage() {
           <h2 className="text-2xl font-bold text-white sm:text-3xl">AI Capabilities</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {capabilities.map((capability) => (
-              <div
+              <article
                 key={capability.title}
                 className="group rounded-xl border border-slate-800 bg-slate-900/60 p-5 transition hover:border-indigo-400/70 hover:bg-slate-900"
               >
@@ -78,7 +78,7 @@ export default function HomePage() {
                     Try it
                   </Link>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </section>
