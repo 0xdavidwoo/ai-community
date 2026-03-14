@@ -5,32 +5,32 @@ const capabilities = [
   {
     title: 'AI Tool Advisor',
     description: 'Get AI tool recommendations tailored to your specific workflow and goals.',
-    href: '/ai-start',
+    href: '/tools',
   },
   {
     title: 'AI Product Builder',
     description: 'Turn your idea into a structured product concept with feature and launch guidance.',
-    href: '/ai-start',
+    href: '/builder',
   },
   {
     title: 'Business Model Analyzer',
     description: 'Evaluate business viability with pricing, customer segments, and revenue strategy insights.',
-    href: '/ai-start',
+    href: '/business',
   },
   {
     title: 'Website Generator',
     description: 'Create a clear website structure and messaging plan for your startup in minutes.',
-    href: '/ai-start',
+    href: '/website',
   },
   {
     title: 'Project Evaluator',
     description: 'Assess project strengths, gaps, and next steps with AI-powered feedback.',
-    href: '/ai-start',
+    href: '/evaluate',
   },
   {
     title: 'Content Analyzer',
     description: 'Analyze content quality and improve clarity, engagement, and impact quickly.',
-    href: '/ai-start',
+    href: '/content-analyzer',
   },
 ];
 
@@ -72,16 +72,10 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-slate-300">{capability.description}</p>
                 <div className="mt-4 flex items-center gap-3">
                   <Link
-                    href="/ai-start"
+                    href={capability.href}
                     className="inline-flex items-center rounded-lg bg-indigo-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-400"
                   >
                     Try it
-                  </Link>
-                  <Link
-                    href={capability.href}
-                    className="inline-block text-sm font-medium text-indigo-300 transition hover:text-indigo-200"
-                  >
-                    Explore →
                   </Link>
                 </div>
               </div>
