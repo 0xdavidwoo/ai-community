@@ -9,6 +9,11 @@ type ToolCard = {
 
 const toolCards: ToolCard[] = [
   {
+    title: 'AI Start',
+    href: '/ai-start',
+    description: 'Enter one idea and generate product, business, website, and score at once.'
+  },
+  {
     title: 'AI Tool Advisor',
     href: '/tools',
     description: 'Get fast tool recommendations based on your task and goals.'
