@@ -1,14 +1,19 @@
 import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 
+type RecommendedTool = {
+  name: string;
+  description: string;
+};
+
 type RecommendToolsApiResponse = {
   task: string;
-  tools: string[];
+  tools: RecommendedTool[];
 };
 
 export default function ToolsPage() {
   const [task, setTask] = useState('');
-  const [tools, setTools] = useState<string[]>([]);
+  const [tools, setTools] = useState<RecommendedTool[]>([]);
   const [submittedTask, setSubmittedTask] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,13 +106,14 @@ export default function ToolsPage() {
               </p>
 
               {tools.length > 0 ? (
-                <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <ul className="mt-4 grid grid-cols-1 gap-3">
                   {tools.map((tool) => (
                     <li
-                      key={tool}
-                      className="rounded-lg border border-indigo-500/40 bg-indigo-500/10 px-3 py-2 text-center text-sm font-medium text-indigo-100"
+                      key={tool.name}
+                      className="rounded-lg border border-indigo-500/40 bg-indigo-500/10 px-4 py-3 text-sm text-indigo-100"
                     >
-                      {tool}
+                      <p className="font-semibold text-white">{tool.name}</p>
+                      <p className="mt-1 text-indigo-100/90">{tool.description}</p>
                     </li>
                   ))}
                 </ul>
