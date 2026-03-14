@@ -1,112 +1,121 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { FormEvent, useState } from 'react';
 
-type Tool = {
-  id: string | number;
-  name: string;
-  description: string | null;
-  link: string | null;
+type RecommendToolsApiResponse = {
+  task: string;
+  tools: string[];
 };
 
-
 export default function ToolsPage() {
-  const [tools, setTools] = useState<Tool[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [task, setTask] = useState('');
+  const [tools, setTools] = useState<string[]>([]);
+  const [submittedTask, setSubmittedTask] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let ignore = false;
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    const loadTools = async () => {
-      if (!supabase) {
-        setError('Supabase environment variables are missing.');
-        setLoading(false);
-        return;
-      }
+    try {
+      const response = await fetch('/api/recommend-tools', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ task })
+      });
 
-      const { data, error: fetchError } = await supabase.from('tools').select('id, name, description, link').order('name');
+      const data = (await response.json()) as RecommendToolsApiResponse | { error: string };
 
-      if (ignore) {
-        return;
-      }
-
-      if (fetchError) {
-        setError(fetchError.message);
+      if (!response.ok) {
         setTools([]);
-      } else {
-        setTools((data ?? []) as Tool[]);
+        setSubmittedTask('');
+        setError('error' in data ? data.error : 'Failed to fetch recommended tools');
+        return;
       }
 
+      if (!('task' in data) || !('tools' in data)) {
+        setTools([]);
+        setSubmittedTask('');
+        setError('Invalid response from server');
+        return;
+      }
+
+      setSubmittedTask(data.task);
+      setTools(data.tools);
+    } catch {
+      setTools([]);
+      setSubmittedTask('');
+      setError('Something went wrong while fetching recommendations.');
+    } finally {
       setLoading(false);
-    };
-
-    loadTools();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+    }
+  };
 
   return (
     <>
       <Head>
-        <title>AI Forge Tools · Discover AI Products</title>
-        <meta name="description" content="Browse the latest AI tools from the AI Forge directory." />
+        <title>AI Tool Advisor</title>
+        <meta name="description" content="Get AI tool recommendations based on your task." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <main className="min-h-screen bg-slate-950 text-slate-100">
-        <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-          <div className="mb-8 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">AI Forge Directory</p>
-              <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Tools</h1>
-              <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
-                Discover and compare products from the AI Forge tool database.
-              </p>
-            </div>
-            <Link
-              href="/"
-              className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-slate-500"
-            >
-              Back to home
-            </Link>
-          </div>
+      <main className="min-h-screen bg-slate-950 px-4 py-16 text-slate-100 sm:px-6">
+        <section className="mx-auto w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl sm:p-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">AI Tool Advisor</p>
+          <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Find tools for your task</h1>
+          <p className="mt-3 text-sm text-slate-300 sm:text-base">
+            Describe what you want to do and get instant AI tool recommendations.
+          </p>
 
-          {loading ? (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-center text-slate-300">Loading tools…</div>
-          ) : error ? (
-            <div className="rounded-2xl border border-rose-500/40 bg-rose-500/10 p-8 text-center text-rose-200">
-              Failed to load tools: {error}
-            </div>
-          ) : tools.length === 0 ? (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-center text-slate-300">
-              No tools found yet. Check back soon for new additions.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {tools.map((tool) => (
-                <article key={tool.id} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-                  <h2 className="text-lg font-semibold text-white">{tool.name}</h2>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{tool.description || 'No description provided.'}</p>
-                  {tool.link ? (
-                    <a
-                      href={tool.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-5 inline-flex rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-400"
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <label htmlFor="task" className="block text-sm font-medium text-slate-200">
+              Task
+            </label>
+            <input
+              id="task"
+              type="text"
+              value={task}
+              onChange={(event) => setTask(event.target.value)}
+              placeholder="e.g. build ai website"
+              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none ring-indigo-400 transition focus:ring-2"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="inline-flex items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? 'Recommending...' : 'Recommend tools'}
+            </button>
+          </form>
+
+          {error ? <p className="mt-6 rounded-lg bg-rose-500/10 px-4 py-3 text-sm text-rose-200">{error}</p> : null}
+
+          {submittedTask && !error ? (
+            <div className="mt-8 rounded-xl border border-slate-800 bg-slate-950/70 p-5">
+              <h2 className="text-lg font-semibold text-white">Recommended tools</h2>
+              <p className="mt-2 text-sm text-slate-300">
+                Task: <span className="font-medium text-slate-100">{submittedTask}</span>
+              </p>
+
+              {tools.length > 0 ? (
+                <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {tools.map((tool) => (
+                    <li
+                      key={tool}
+                      className="rounded-lg border border-indigo-500/40 bg-indigo-500/10 px-3 py-2 text-center text-sm font-medium text-indigo-100"
                     >
-                      Visit tool
-                    </a>
-                  ) : (
-                    <p className="mt-5 text-sm text-slate-400">No link available.</p>
-                  )}
-                </article>
-              ))}
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-4 text-sm text-slate-400">No matching recommendation found for this task yet.</p>
+              )}
             </div>
-          )}
+          ) : null}
         </section>
       </main>
     </>
