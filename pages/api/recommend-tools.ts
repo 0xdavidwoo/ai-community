@@ -2,26 +2,45 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type RecommendToolsResponse = {
   task: string;
-  tools: string[];
+  tools: Array<{
+    name: string;
+    description: string;
+  }>;
 };
 
-const getRecommendedTools = (task: string): string[] => {
+const getRecommendedTools = (task: string): RecommendToolsResponse['tools'] => {
   const normalizedTask = task.toLowerCase();
 
   if (normalizedTask.includes('writing')) {
-    return ['ChatGPT', 'Claude', 'Notion AI'];
+    return [
+      { name: 'ChatGPT', description: 'Versatile AI assistant for drafting and editing copy' },
+      { name: 'Claude', description: 'Strong long-form writing and document summarization assistant' },
+      { name: 'Notion AI', description: 'Writing support directly inside your notes and docs workspace' }
+    ];
   }
 
   if (normalizedTask.includes('image')) {
-    return ['Midjourney', 'DALL-E', 'Stable Diffusion'];
+    return [
+      { name: 'Midjourney', description: 'Text-to-image tool for stylized visual generation' },
+      { name: 'DALL-E', description: 'Image generation model for creating visuals from prompts' },
+      { name: 'Stable Diffusion', description: 'Open-source image model with high customization flexibility' }
+    ];
   }
 
   if (normalizedTask.includes('video')) {
-    return ['Runway', 'Pika', 'CapCut AI'];
+    return [
+      { name: 'Runway', description: 'AI video editing and generation platform for creators' },
+      { name: 'Pika', description: 'Prompt-based tool for generating short AI videos' },
+      { name: 'CapCut AI', description: 'Consumer-friendly video editor with built-in AI effects' }
+    ];
   }
 
   if (normalizedTask.includes('website')) {
-    return ['Next.js', 'Vercel', 'Supabase'];
+    return [
+      { name: 'Next.js', description: 'React framework for building websites' },
+      { name: 'Vercel', description: 'Platform to deploy frontend apps' },
+      { name: 'Supabase', description: 'Open-source backend and database' }
+    ];
   }
 
   return [];
