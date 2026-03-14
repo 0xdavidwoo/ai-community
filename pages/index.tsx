@@ -5,32 +5,32 @@ const capabilities = [
   {
     title: 'AI Tool Advisor',
     description: 'Get AI tool recommendations tailored to your specific workflow and goals.',
-    href: '/tools',
+    href: '/ai-start',
   },
   {
     title: 'AI Product Builder',
     description: 'Turn your idea into a structured product concept with feature and launch guidance.',
-    href: '/builder',
+    href: '/ai-start',
   },
   {
     title: 'Business Model Analyzer',
     description: 'Evaluate business viability with pricing, customer segments, and revenue strategy insights.',
-    href: '/business',
+    href: '/ai-start',
   },
   {
     title: 'Website Generator',
     description: 'Create a clear website structure and messaging plan for your startup in minutes.',
-    href: '/website',
+    href: '/ai-start',
   },
   {
     title: 'Project Evaluator',
     description: 'Assess project strengths, gaps, and next steps with AI-powered feedback.',
-    href: '/evaluate',
+    href: '/ai-start',
   },
   {
     title: 'Content Analyzer',
     description: 'Analyze content quality and improve clarity, engagement, and impact quickly.',
-    href: '/content-analyzer',
+    href: '/ai-start',
   },
 ];
 
