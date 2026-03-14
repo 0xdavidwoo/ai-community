@@ -1,6 +1,39 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
+const capabilities = [
+  {
+    title: 'AI Tool Advisor',
+    description: 'Get AI tool recommendations tailored to your specific workflow and goals.',
+    href: '/tools',
+  },
+  {
+    title: 'AI Product Builder',
+    description: 'Turn your idea into a structured product concept with feature and launch guidance.',
+    href: '/builder',
+  },
+  {
+    title: 'Business Model Analyzer',
+    description: 'Evaluate business viability with pricing, customer segments, and revenue strategy insights.',
+    href: '/business',
+  },
+  {
+    title: 'Website Generator',
+    description: 'Create a clear website structure and messaging plan for your startup in minutes.',
+    href: '/website',
+  },
+  {
+    title: 'Project Evaluator',
+    description: 'Assess project strengths, gaps, and next steps with AI-powered feedback.',
+    href: '/evaluate',
+  },
+  {
+    title: 'Content Analyzer',
+    description: 'Analyze content quality and improve clarity, engagement, and impact quickly.',
+    href: '/content-analyzer',
+  },
+];
+
 export default function HomePage() {
   return (
     <>
@@ -25,6 +58,25 @@ export default function HomePage() {
           >
             Start building →
           </Link>
+        </section>
+
+        <section className="mx-auto mt-12 w-full max-w-5xl">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">AI Capabilities</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {capabilities.map((capability) => (
+              <Link
+                key={capability.title}
+                href={capability.href}
+                className="group rounded-xl border border-slate-800 bg-slate-900/60 p-5 transition hover:border-indigo-400/70 hover:bg-slate-900"
+              >
+                <h3 className="text-lg font-semibold text-white group-hover:text-indigo-300">{capability.title}</h3>
+                <p className="mt-2 text-sm text-slate-300">{capability.description}</p>
+                <span className="mt-4 inline-block text-sm font-medium text-indigo-300 group-hover:text-indigo-200">
+                  Explore →
+                </span>
+              </Link>
+            ))}
+          </div>
         </section>
       </main>
     </>
