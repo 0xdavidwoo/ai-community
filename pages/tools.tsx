@@ -1,114 +1,65 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import Head from 'next/head'
+import Link from 'next/link'
 
-type Tool = {
-  id: string | number;
-  name: string;
-  description: string | null;
-  link: string | null;
-};
-
+const TOOLS = [
+  { name: 'ChatGPT', description: 'AI 写作、编程、问答助手', link: 'https://chat.openai.com', tag: '对话' },
+  { name: 'Claude', description: '长文档分析和代码生成', link: 'https://claude.ai', tag: '对话' },
+  { name: 'Midjourney', description: '高质量 AI 图像生成', link: 'https://midjourney.com', tag: '图像' },
+  { name: 'Cursor', description: 'AI 驱动的编程开发环境', link: 'https://cursor.sh', tag: '编程' },
+  { name: 'Perplexity', description: 'AI 实时搜索引擎', link: 'https://perplexity.ai', tag: '搜索' },
+  { name: 'Runway', description: 'AI 视频生成和编辑', link: 'https://runwayml.com', tag: '视频' },
+  { name: 'Notion AI', description: '文档写作和整理助手', link: 'https://notion.so', tag: '效率' },
+  { name: 'ElevenLabs', description: 'AI 语音克隆和合成', link: 'https://elevenlabs.io', tag: '音频' },
+  { name: 'Vercel v0', description: 'AI 生成前端 UI 组件', link: 'https://v0.dev', tag: '编程' },
+]
 
 export default function ToolsPage() {
-  const [tools, setTools] = useState<Tool[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let ignore = false;
-
-    const loadTools = async () => {
-      if (!supabase) {
-        setError('Supabase environment variables are missing.');
-        setLoading(false);
-        return;
-      }
-
-      const { data, error: fetchError } = await supabase.from('tools').select('id, name, description, link').order('name');
-
-      if (ignore) {
-        return;
-      }
-
-      if (fetchError) {
-        setError(fetchError.message);
-        setTools([]);
-      } else {
-        setTools((data ?? []) as Tool[]);
-      }
-
-      setLoading(false);
-    };
-
-    loadTools();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
   return (
     <>
       <Head>
-        <title>AI Forge Tools · Discover AI Products</title>
-        <meta name="description" content="Browse the latest AI tools from the AI Forge directory." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>AI 工具目录 · AI Forge</title>
+        <meta name="description" content="社区常用 AI 工具收录" />
       </Head>
+      <main className="min-h-screen bg-[#f3f3f3] text-black">
 
-      <main className="min-h-screen bg-slate-950 text-slate-100">
-        <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-          <div className="mb-8 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">AI Forge Directory</p>
-              <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Tools</h1>
-              <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
-                Discover and compare products from the AI Forge tool database.
-              </p>
-            </div>
-            <Link
-              href="/"
-              className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-slate-500"
-            >
-              Back to home
-            </Link>
+        <div className="flex justify-between items-center px-14 py-8 bg-white border-b border-gray-100">
+          <Link href="/" className="text-xl font-semibold">AI Forge · 造物社</Link>
+          <div className="flex gap-10 text-sm">
+            <Link href="/feed">内容精选</Link>
+            <Link href="/tools" className="font-semibold">工具</Link>
+            <Link href="/skills">Skills</Link>
+            <a href="#">社区</a>
           </div>
+          <Link href="/login">
+            <button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button>
+          </Link>
+        </div>
 
-          {loading ? (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-center text-slate-300">Loading tools…</div>
-          ) : error ? (
-            <div className="rounded-2xl border border-rose-500/40 bg-rose-500/10 p-8 text-center text-rose-200">
-              Failed to load tools: {error}
-            </div>
-          ) : tools.length === 0 ? (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-center text-slate-300">
-              No tools found yet. Check back soon for new additions.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {tools.map((tool) => (
-                <article key={tool.id} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-                  <h2 className="text-lg font-semibold text-white">{tool.name}</h2>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{tool.description || 'No description provided.'}</p>
-                  {tool.link ? (
-                    <a
-                      href={tool.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-5 inline-flex rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-400"
-                    >
-                      Visit tool
-                    </a>
-                  ) : (
-                    <p className="mt-5 text-sm text-slate-400">No link available.</p>
-                  )}
-                </article>
-              ))}
-            </div>
-          )}
-        </section>
+        <div className="max-w-5xl mx-auto px-6 py-12">
+          <p className="text-sm text-gray-400 mb-2">探索</p>
+          <h1 className="text-4xl font-semibold mb-2">AI 工具目录</h1>
+          <p className="text-gray-500 mb-10">收录社区常用的 AI 产品，点击跳转官网体验。</p>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {TOOLS.map((tool) => (
+              
+                key={tool.name}
+                href={tool.link}
+                target="_blank"
+                rel="noreferrer"
+                className="block bg-white rounded-[24px] p-6 hover:shadow-md transition group"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-lg font-semibold group-hover:text-[#ff6b6b] transition">{tool.name}</h2>
+                  <span className="text-xs px-2 py-1 rounded-full bg-[#f3f3f3] text-gray-500">{tool.tag}</span>
+                </div>
+                <p className="text-sm text-gray-500">{tool.description}</p>
+                <p className="mt-4 text-xs text-gray-400 group-hover:text-[#ff6b6b] transition">访问 →</p>
+              </a>
+            ))}
+          </div>
+        </div>
       </main>
     </>
-  );
+  )
 }

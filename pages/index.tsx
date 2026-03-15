@@ -1,121 +1,115 @@
-import Head from 'next/head'
-import Link from 'next/link'
+import Head from 'next/head';
+import Link from 'next/link';
+import type { GetServerSideProps } from 'next';
+import { createClient } from '@supabase/supabase-js';
 
-export default function HomePage() {
+type Article = {
+  id: string;
+  title: string;
+  category: string;
+  summary: string;
+  published_at: string;
+};
+
+type HomePageProps = {
+  articles: Article[];
+  fetchError: string | null;
+};
+
+function formatPublishedDate(isoDate: string) {
+  const parsedDate = new Date(isoDate);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return isoDate;
+  }
+
+  return parsedDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+export default function HomePage({ articles, fetchError }: HomePageProps) {
   return (
     <>
       <Head>
-        <title>AI Forge · 造物社</title>
-        <meta name="description" content="Build AI products together" />
+        <title>AI Forge · Home Feed</title>
+        <meta name="description" content="A community feed of recent AI Forge articles." />
       </Head>
-      <main className="bg-[#f3f3f3] text-black">
 
-        {/* 导航栏 */}
-        <div className="flex justify-between items-center px-14 py-8">
-          <h1 className="text-xl font-semibold">AI Forge · 造物社</h1>
-          <div className="flex gap-10 text-sm">
-            <Link href="/feed">内容精选</Link>
-            <a href="#">工具</a>
-            <a href="#">项目</a>
-            <a href="#">社区</a>
-          </div>
-          <Link href="/login">
-            <button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button>
-          </Link>
+      <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100 sm:px-6">
+        <div className="mx-auto max-w-5xl">
+          <header className="mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">AI Forge</p>
+            <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Homepage Feed</h1>
+            <p className="mt-2 text-sm text-slate-300 sm:text-base">Browse the latest community articles from Supabase.</p>
+          </header>
+
+          {fetchError ? (
+            <p className="mb-6 rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200">{fetchError}</p>
+          ) : null}
+
+          {articles.length === 0 ? (
+            <p className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 text-sm text-slate-300">No articles found.</p>
+          ) : (
+            <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {articles.map((article) => (
+                <Link
+                  key={article.id}
+                  href={`/article/${article.id}`}
+                  className="group block rounded-2xl border border-slate-800 bg-slate-900/70 p-5 transition hover:border-indigo-400/50 hover:bg-slate-900"
+                >
+                  <div className="mb-3 flex items-center justify-between gap-2 text-xs text-slate-400">
+                    <span className="rounded-full bg-indigo-500/20 px-2 py-1 font-medium text-indigo-200">{article.category}</span>
+                    <time dateTime={article.published_at}>{formatPublishedDate(article.published_at)}</time>
+                  </div>
+
+                  <h2 className="text-lg font-semibold text-white transition group-hover:text-indigo-300">{article.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{article.summary}</p>
+                </Link>
+              ))}
+            </section>
+          )}
         </div>
-
-        {/* Hero 卡片网格 */}
-        <section className="px-14 pb-16 grid md:grid-cols-3 gap-6 auto-rows-[260px]">
-
-          <div className="md:col-span-2 row-span-2 rounded-[40px] bg-[#ff6b6b] text-white p-12 flex flex-col justify-between">
-            <div>
-              <h2 className="text-6xl font-semibold leading-tight">
-                用 AI<br/>一起造<br/>好产品
-              </h2>
-              <p className="mt-6 max-w-md text-white/90">
-                发现工具、结识创造者，在这里启动你的 AI 实验。
-              </p>
-            </div>
-            <Link href="/feed">
-              <button className="bg-white text-black px-6 py-3 rounded-full w-fit">开始探索</button>
-            </Link>
-          </div>
-
-          <div className="rounded-[32px] overflow-hidden relative group">
-            <img
-              src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
-              className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-            />
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-xl font-semibold">AI 实验</h3>
-            </div>
-          </div>
-
-          <div className="rounded-[32px] bg-[#ffd93d] p-8 flex flex-col justify-between">
-            <h3 className="text-2xl font-semibold">发现 AI 工具</h3>
-            <p className="text-sm">探索创作者和开发者正在使用的 AI 工具。</p>
-          </div>
-
-          <div className="rounded-[32px] overflow-hidden relative group row-span-2">
-            <img
-              src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
-              className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-            />
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-xl font-semibold">创造者项目</h3>
-            </div>
-          </div>
-
-          <div className="rounded-[32px] bg-[#6bcb77] p-8 flex flex-col justify-between">
-            <h3 className="text-2xl font-semibold">社区</h3>
-            <p className="text-sm">加入正在打造 AI 产品的创业者和独立开发者。</p>
-          </div>
-
-          <div className="rounded-[32px] overflow-hidden relative group">
-            <img
-              src="https://images.unsplash.com/photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80"
-              className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-            />
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-xl font-semibold">每周分享</h3>
-            </div>
-          </div>
-
-        </section>
-
-        {/* 内容精选入口 */}
-        <section className="px-14 py-20 bg-white">
-          <div className="mb-10">
-            <p className="text-sm text-gray-500 mb-2">精选</p>
-            <h3 className="text-4xl font-semibold">内容精选</h3>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="rounded-[28px] bg-[#f6f6f6] p-8 hover:scale-[1.02] transition">
-              <h4 className="text-xl font-semibold">AI 工具测评</h4>
-              <p className="text-sm text-gray-600 mt-3">最新 AI 工具深度体验报告。</p>
-            </div>
-            <div className="rounded-[28px] bg-[#f6f6f6] p-8 hover:scale-[1.02] transition">
-              <h4 className="text-xl font-semibold">行业资讯</h4>
-              <p className="text-sm text-gray-600 mt-3">AI 行业最新动态与趋势分析。</p>
-            </div>
-            <div className="rounded-[28px] bg-[#f6f6f6] p-8 hover:scale-[1.02] transition">
-              <h4 className="text-xl font-semibold">社区产品案例</h4>
-              <p className="text-sm text-gray-600 mt-3">成员用 AI 做出来的真实产品。</p>
-            </div>
-          </div>
-          <div className="mt-10">
-            <Link href="/feed">
-              <button className="bg-black text-white px-8 py-3 rounded-full">查看全部内容 →</button>
-            </Link>
-          </div>
-        </section>
-
-        {/* 大字品牌区 */}
-        <section className="h-[60vh] flex items-center justify-center bg-black text-white">
-          <h1 className="text-[120px] font-semibold tracking-tight">AI Forge</h1>
-        </section>
-
       </main>
     </>
-  )
+  );
 }
+
+export const getServerSideProps: GetServerSideProps<HomePageProps> = async () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return {
+      props: {
+        articles: [],
+        fetchError: 'Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+      }
+    };
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+  const { data, error } = await supabase
+    .from('articles')
+    .select('id,title,category,summary,published_at')
+    .order('published_at', { ascending: false });
+
+  if (error) {
+    return {
+      props: {
+        articles: [],
+        fetchError: `Failed to load articles: ${error.message}`
+      }
+    };
+  }
+
+  return {
+    props: {
+      articles: (data ?? []) as Article[],
+      fetchError: null
+    }
+  };
+};
