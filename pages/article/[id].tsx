@@ -1,138 +1,105 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import type { GetServerSideProps } from 'next';
-import { createClient } from '@supabase/supabase-js';
+import Head from 'next/head'
+import Link from 'next/link'
+import type { GetServerSideProps } from 'next'
+import { createClient } from '@supabase/supabase-js'
 
 type Article = {
-  id: string;
-  title: string;
-  category: string;
-  published_at: string;
-  content: string;
-};
-
-type ArticleDetailPageProps = {
-  article: Article | null;
-  fetchError: string | null;
-};
-
-function formatPublishedDate(isoDate: string) {
-  const parsedDate = new Date(isoDate);
-
-  if (Number.isNaN(parsedDate.getTime())) {
-    return isoDate;
-  }
-
-  return parsedDate.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
+  id: string
+  title: string
+  category: string
+  summary: string
+  published_at: string
+  content: string
 }
 
-export default function ArticleDetailPage({ article, fetchError }: ArticleDetailPageProps) {
+type Props = {
+  article: Article | null
+  fetchError: string | null
+}
+
+function formatDate(isoDate: string) {
+  const d = new Date(isoDate)
+  if (Number.isNaN(d.getTime())) return isoDate
+  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
+export default function ArticlePage({ article, fetchError }: Props) {
   if (!article) {
     return (
-      <>
-        <Head>
-          <title>Article Not Found | AI Forge</title>
-          <meta name="description" content="The requested article could not be loaded." />
-        </Head>
-
-        <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100 sm:px-6">
-          <div className="mx-auto max-w-3xl rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
-            <p className="text-sm text-slate-300">{fetchError ?? 'Article not found.'}</p>
-            <Link href="/" className="mt-4 inline-block text-sm font-medium text-indigo-300 hover:text-indigo-200">
-              ← Back to feed
-            </Link>
-          </div>
-        </main>
-      </>
-    );
+      <main className="min-h-screen bg-[#f3f3f3] flex items-center justify-center">
+        <div className="bg-white rounded-[24px] p-10 text-center">
+          <p className="text-gray-500">{fetchError ?? '文章不存在'}</p>
+          <Link href="/feed" className="mt-4 inline-block text-sm font-medium text-black underline">← 返回内容精选</Link>
+        </div>
+      </main>
+    )
   }
 
   return (
     <>
       <Head>
-        <title>{article.title} | AI Forge</title>
-        <meta name="description" content={article.content.slice(0, 140)} />
+        <title>{article.title} · AI Forge</title>
+        <meta name="description" content={article.summary} />
       </Head>
+      <main className="min-h-screen bg-[#f3f3f3] text-black">
 
-      <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100 sm:px-6">
-        <article className="mx-auto max-w-3xl rounded-2xl border border-slate-800 bg-slate-900/70 p-6 sm:p-8">
-          <Link href="/" className="text-sm font-medium text-indigo-300 hover:text-indigo-200">
-            ← Back to feed
+        <div className="flex justify-between items-center px-14 py-8 bg-white border-b border-gray-100">
+          <Link href="/" className="text-xl font-semibold">AI Forge · 造物社</Link>
+          <div className="flex gap-10 text-sm">
+            <Link href="/feed" className="font-semibold">内容精选</Link>
+            <a href="#">工具</a>
+            <a href="#">社区</a>
+          </div>
+          <Link href="/login">
+            <button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button>
           </Link>
+        </div>
 
-          <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-slate-300">
-            <span className="rounded-full bg-indigo-500/20 px-3 py-1 font-semibold uppercase tracking-wide text-indigo-200">
-              {article.category}
+        <div className="max-w-3xl mx-auto px-6 py-12">
+
+          <Link href="/feed" className="text-sm text-gray-400 hover:text-black transition">← 返回内容精选</Link>
+
+          <div className="mt-6 flex items-center gap-3">
+            <span className="text-xs px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-600 font-medium">
+              {article.category === 'tool' ? 'AI 工具' : article.category === 'news' ? '行业资讯' : '社区产品'}
             </span>
-            <time dateTime={article.published_at}>{formatPublishedDate(article.published_at)}</time>
+            <span className="text-xs text-gray-400">{formatDate(article.published_at)}</span>
           </div>
 
-          <h1 className="mt-4 text-2xl font-bold leading-tight text-white sm:text-3xl">{article.title}</h1>
-          <p className="mt-6 whitespace-pre-line text-base leading-7 text-slate-200">{article.content}</p>
-        </article>
+          <h1 className="mt-4 text-4xl font-semibold leading-tight">{article.title}</h1>
+
+          {article.summary && (
+            <div className="mt-6 bg-white rounded-[20px] p-6 border-l-4 border-[#ff6b6b]">
+              <p className="text-sm text-gray-500 mb-1">编辑推荐</p>
+              <p className="text-base text-gray-700 leading-relaxed">{article.summary}</p>
+            </div>
+          )}
+
+          <div className="mt-8 bg-white rounded-[24px] p-8">
+            <p className="text-base text-gray-700 leading-8 whitespace-pre-line">{article.content}</p>
+          </div>
+
+        </div>
       </main>
     </>
-  );
+  )
 }
 
-export const getServerSideProps: GetServerSideProps<ArticleDetailPageProps> = async ({ params }) => {
-  const articleId = typeof params?.id === 'string' ? params.id : '';
+export const getServerSideProps: GetServerSideProps<Props> = async ({ params }) => {
+  const articleId = typeof params?.id === 'string' ? params.id : ''
+  if (!articleId) return { props: { article: null, fetchError: '无效的文章 ID' } }
 
-  if (!articleId) {
-    return {
-      props: {
-        article: null,
-        fetchError: 'Invalid article id.'
-      }
-    };
-  }
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!supabaseUrl || !supabaseAnonKey) return { props: { article: null, fetchError: 'Supabase 未配置' } }
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return {
-      props: {
-        article: null,
-        fetchError: 'Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
-      }
-    };
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
   const { data, error } = await supabase
     .from('articles')
-    .select('id,title,category,published_at,content')
+    .select('id,title,category,summary,published_at,content')
     .eq('id', articleId)
-    .maybeSingle();
+    .maybeSingle()
 
-  if (error) {
-    return {
-      props: {
-        article: null,
-        fetchError: `Failed to load article: ${error.message}`
-      }
-    };
-  }
-
-  if (!data) {
-    return {
-      props: {
-        article: null,
-        fetchError: 'Article not found.'
-      }
-    };
-  }
-
-  return {
-    props: {
-      article: data as Article,
-      fetchError: null
-    }
-  };
-};
+  if (error || !data) return { props: { article: null, fetchError: '文章未找到' } }
+  return { props: { article: data as Article, fetchError: null } }
+}
