@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import TopNav from '../components/TopNav'
 
 export default function HomePage() {
   return (
@@ -10,19 +11,7 @@ export default function HomePage() {
       </Head>
       <main className="bg-[#f3f3f3] text-black">
 
-        {/* 导航栏 */}
-        <div className="flex justify-between items-center px-14 py-8">
-          <h1 className="text-xl font-semibold">AI Forge · 造物社</h1>
-          <div className="flex gap-10 text-sm">
-            <Link href="/feed">内容精选</Link>
-            <a href="#">工具</a>
-            <a href="#">项目</a>
-            <a href="#">社区</a>
-          </div>
-          <Link href="/login">
-            <button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button>
-          </Link>
-        </div>
+        <TopNav />
 
         {/* Hero 卡片网格 */}
         <section className="px-14 pb-16 grid md:grid-cols-3 gap-6 auto-rows-[260px]">
