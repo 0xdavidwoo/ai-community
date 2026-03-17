@@ -13,6 +13,8 @@ const TOOLS = [
   { name: 'Vercel v0', description: 'AI 生成前端 UI 组件', link: 'https://v0.dev', tag: '编程' },
 ]
 
+type Tool = { name: string; description: string; link: string; tag: string }
+
 export default function ToolsPage() {
   return (
     <>
@@ -21,7 +23,6 @@ export default function ToolsPage() {
         <meta name="description" content="社区常用 AI 工具收录" />
       </Head>
       <main className="min-h-screen bg-[#f3f3f3] text-black">
-
         <div className="flex justify-between items-center px-14 py-8 bg-white border-b border-gray-100">
           <Link href="/" className="text-xl font-semibold">AI Forge · 造物社</Link>
           <div className="flex gap-10 text-sm">
@@ -34,21 +35,13 @@ export default function ToolsPage() {
             <button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button>
           </Link>
         </div>
-
         <div className="max-w-5xl mx-auto px-6 py-12">
           <p className="text-sm text-gray-400 mb-2">探索</p>
           <h1 className="text-4xl font-semibold mb-2">AI 工具目录</h1>
           <p className="text-gray-500 mb-10">收录社区常用的 AI 产品，点击跳转官网体验。</p>
-
           <div className="grid md:grid-cols-3 gap-4">
-            {TOOLS.map((tool) => (
-              
-                key={tool.name}
-                href={tool.link}
-                target="_blank"
-                rel="noreferrer"
-                className="block bg-white rounded-[24px] p-6 hover:shadow-md transition group"
-              >
+            {TOOLS.map((tool: Tool) => (
+              <a key={tool.name} href={tool.link} target="_blank" rel="noreferrer" className="block bg-white rounded-[24px] p-6 hover:shadow-md transition group">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-lg font-semibold group-hover:text-[#ff6b6b] transition">{tool.name}</h2>
                   <span className="text-xs px-2 py-1 rounded-full bg-[#f3f3f3] text-gray-500">{tool.tag}</span>
