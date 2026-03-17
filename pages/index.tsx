@@ -15,7 +15,7 @@ export default function HomePage() {
           <h1 className="text-xl font-semibold">AI Forge · 造物社</h1>
           <div className="flex gap-10 text-sm">
             <Link href="/feed">内容精选</Link>
-            <a href="#">工具</a>
+            <Link href="/skills">工具</Link>
             <a href="#">项目</a>
             <a href="#">社区</a>
           </div>
