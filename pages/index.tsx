@@ -8,10 +8,10 @@ export default function Home() {
         <h1 className="text-xl font-semibold">AI Forge</h1>
 
         <div className="flex gap-10 text-sm">
-          <a>Experiments</a>
-          <a>Projects</a>
-          <a>Tools</a>
-          <a>Community</a>
+          <a href="/feed">内容精选</a>
+          <a href="/skills">Skills</a>
+          <a href="/tools">工具</a>
+          <a href="#">社区</a>
         </div>
 
         <button className="bg-black text-white px-6 py-2 rounded-full text-sm">
