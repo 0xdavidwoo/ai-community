@@ -7,6 +7,8 @@ const navLinks = [
   { href: '#', label: '社区' },
 ]
 
+const mobileMenuLinks = [...navLinks, { href: '#join', label: '加入' }]
+
 const skillCards = [
   {
     href: '/skills/ai-start',
@@ -56,7 +58,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-xl font-semibold">AI Forge</h1>
 
-          <div className="hidden gap-10 text-sm sm:flex">
+          <div className="hidden gap-10 text-sm md:flex">
             {navLinks.map((link) => (
               <a key={link.label} href={link.href}>
                 {link.label}
@@ -67,7 +69,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white sm:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white md:hidden"
               aria-label={isMenuOpen ? '关闭菜单' : '打开菜单'}
               aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen((open) => !open)}
@@ -79,14 +81,17 @@ export default function Home() {
               </span>
             </button>
 
-            <button className="hidden rounded-full bg-black px-6 py-2 text-sm text-white sm:block">
+            <button
+              id="join"
+              className="hidden rounded-full bg-black px-6 py-2 text-sm text-white md:block"
+            >
               Join
             </button>
           </div>
         </div>
 
         {isMenuOpen && (
-          <div className="fixed inset-x-0 top-0 z-50 bg-black px-6 pb-8 pt-24 text-white shadow-2xl sm:hidden">
+          <div className="fixed inset-0 z-50 flex min-h-screen flex-col bg-black px-6 pb-8 pt-24 text-white shadow-2xl md:hidden">
             <button
               type="button"
               className="absolute right-6 top-8 text-sm text-white/80"
@@ -95,8 +100,8 @@ export default function Home() {
               关闭
             </button>
 
-            <nav className="flex flex-col gap-4 text-lg">
-              {navLinks.map((link) => (
+            <nav className="flex flex-1 flex-col justify-center gap-4 text-lg">
+              {mobileMenuLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
@@ -136,10 +141,11 @@ export default function Home() {
 
         <div className="group relative min-h-[260px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1685094488371-5f8adf2e4b0f?w=1200"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="AI Experiments"
           />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
 
           <div className="absolute bottom-6 left-6 text-white">
             <h3 className="text-xl font-semibold">AI Experiments</h3>
@@ -164,10 +170,11 @@ export default function Home() {
 
         <div className="group relative min-h-[280px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1702648249124-d5ecf1a3b0c8?w=1200"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="Builder Projects"
           />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
 
           <div className="absolute bottom-6 left-6 text-white">
             <h3 className="text-xl font-semibold">Builder Projects</h3>
@@ -176,10 +183,11 @@ export default function Home() {
 
         <div className="group relative min-h-[220px] overflow-hidden rounded-[32px] md:col-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1686191128244-8f0eb0a9a4d4?w=1200"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="Weekly Sessions"
           />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
 
           <div className="absolute bottom-6 left-6 text-white">
             <h3 className="text-xl font-semibold">Weekly Sessions</h3>
@@ -226,16 +234,20 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <div className="overflow-hidden rounded-[36px] bg-[#f6f6f6]">
-            <img
-              src="https://images.unsplash.com/photo-1676299081847-824916de030a?auto=format&fit=crop&w=1200&q=80"
-              className="h-[300px] w-full object-cover"
-              alt="AI Podcast Generator"
-            />
+            <div className="group relative overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1676727294026-5c5a4a7c3d75?w=1200"
+                className="h-[300px] w-full object-cover transition duration-500 group-hover:scale-105"
+                alt="AI Podcast Generator"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-6 left-6 text-white">
+                <h4 className="text-3xl font-semibold">AI Podcast Generator</h4>
+              </div>
+            </div>
 
             <div className="p-8">
-              <h4 className="text-3xl font-semibold">AI Podcast Generator</h4>
-
-              <p className="mt-3 max-w-lg text-gray-600">
+              <p className="max-w-lg text-gray-600">
                 Turn daily AI news into audio episodes with scripts, voices and
                 publishing.
               </p>
@@ -330,16 +342,20 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <div className="overflow-hidden rounded-[36px] bg-[#f6f6f6]">
-            <img
-              src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
-              className="h-[280px] w-full object-cover"
-              alt="AI Podcast Builder"
-            />
+            <div className="group relative overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200"
+                className="h-[280px] w-full object-cover transition duration-500 group-hover:scale-105"
+                alt="AI Podcast Builder"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-6 left-6 text-white">
+                <h4 className="text-3xl font-semibold">AI Podcast Builder</h4>
+              </div>
+            </div>
 
             <div className="p-8">
-              <h4 className="text-3xl font-semibold">AI Podcast Builder</h4>
-
-              <p className="mt-3 max-w-lg text-gray-600">
+              <p className="max-w-lg text-gray-600">
                 Automatically generate podcast scripts, voices and publish
                 episodes.
               </p>
@@ -347,16 +363,20 @@ export default function Home() {
           </div>
 
           <div className="overflow-hidden rounded-[36px] bg-[#f6f6f6]">
-            <img
-              src="https://images.unsplash.com/photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80"
-              className="h-[280px] w-full object-cover"
-              alt="AI Tool Navigator"
-            />
+            <div className="group relative overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1679060951013-c0e4fda6734b?w=1200"
+                className="h-[280px] w-full object-cover transition duration-500 group-hover:scale-105"
+                alt="AI Tool Navigator"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-6 left-6 text-white">
+                <h4 className="text-3xl font-semibold">AI Tool Navigator</h4>
+              </div>
+            </div>
 
             <div className="p-8">
-              <h4 className="text-3xl font-semibold">AI Tool Navigator</h4>
-
-              <p className="mt-3 max-w-lg text-gray-600">
+              <p className="max-w-lg text-gray-600">
                 Discover and compare the best AI tools for productivity.
               </p>
             </div>
