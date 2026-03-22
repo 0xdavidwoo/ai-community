@@ -200,6 +200,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section className="h-[40vh] flex items-center justify-center bg-black text-white">
+        <h1 className="text-[80px] sm:text-[120px] font-semibold tracking-tight">AI Forge</h1>
+      </section>
     </main>
   )
 }
