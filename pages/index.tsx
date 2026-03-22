@@ -49,16 +49,30 @@ const skillCards = [
 ]
 
 export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <main className="overflow-x-hidden bg-[#f3f3f3] text-black">
       {/* NAVBAR */}
       <div className="relative px-6 py-8 sm:px-14">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 md:hidden">
           <h1 className="text-xl font-semibold">AI Forge</h1>
 
-          <div className="hidden gap-10 text-sm md:flex">
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-2xl leading-none"
+            aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? '×' : '☰'}
+          </button>
+        </div>
+
+        <div className="hidden items-center justify-between gap-4 md:flex">
+          <h1 className="text-xl font-semibold">AI Forge</h1>
+
+          <div className="flex gap-10 text-sm">
             {navLinks.map((link) => (
               <a key={link.label} href={link.href}>
                 {link.label}
@@ -66,47 +80,31 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white md:hidden"
-              aria-label={isMenuOpen ? '关闭菜单' : '打开菜单'}
-              aria-expanded={isMenuOpen}
-              onClick={() => setIsMenuOpen((open) => !open)}
-            >
-              <span className="flex flex-col gap-1.5">
-                <span className="h-0.5 w-5 rounded-full bg-black" />
-                <span className="h-0.5 w-5 rounded-full bg-black" />
-                <span className="h-0.5 w-5 rounded-full bg-black" />
-              </span>
-            </button>
-
-            <button
-              id="join"
-              className="hidden rounded-full bg-black px-6 py-2 text-sm text-white md:block"
-            >
-              Join
-            </button>
-          </div>
+          <button
+            id="join"
+            className="rounded-full bg-black px-6 py-2 text-sm text-white"
+          >
+            Join
+          </button>
         </div>
 
-        {isMenuOpen && (
-          <div className="fixed inset-0 z-50 flex min-h-screen flex-col bg-black px-6 pb-8 pt-24 text-white shadow-2xl md:hidden">
+        {menuOpen && (
+          <div className="fixed inset-0 z-50 flex min-h-screen flex-col items-center justify-center bg-white px-6 text-center md:hidden">
             <button
               type="button"
-              className="absolute right-6 top-8 text-sm text-white/80"
-              onClick={() => setIsMenuOpen(false)}
+              className="absolute right-6 top-8 text-4xl leading-none text-black"
+              aria-label="关闭菜单"
+              onClick={() => setMenuOpen(false)}
             >
-              关闭
+              ×
             </button>
 
-            <nav className="flex flex-1 flex-col justify-center gap-4 text-lg">
+            <nav className="flex flex-col items-center gap-8 text-3xl font-semibold">
               {mobileMenuLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className="rounded-2xl border border-white/10 px-5 py-4"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
                 </a>
@@ -141,11 +139,11 @@ export default function Home() {
 
         <div className="group relative min-h-[260px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1685094488371-5f8adf2e4b0f?w=1200"
+            src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="AI Experiments"
           />
-          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
           <div className="absolute bottom-6 left-6 text-white">
             <h3 className="text-xl font-semibold">AI Experiments</h3>
@@ -170,11 +168,11 @@ export default function Home() {
 
         <div className="group relative min-h-[280px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1702648249124-d5ecf1a3b0c8?w=1200"
+            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="Builder Projects"
           />
-          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
           <div className="absolute bottom-6 left-6 text-white">
             <h3 className="text-xl font-semibold">Builder Projects</h3>
@@ -183,11 +181,11 @@ export default function Home() {
 
         <div className="group relative min-h-[220px] overflow-hidden rounded-[32px] md:col-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1686191128244-8f0eb0a9a4d4?w=1200"
+            src="https://images.unsplash.com/photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="Weekly Sessions"
           />
-          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
           <div className="absolute bottom-6 left-6 text-white">
             <h3 className="text-xl font-semibold">Weekly Sessions</h3>
@@ -236,11 +234,11 @@ export default function Home() {
           <div className="overflow-hidden rounded-[36px] bg-[#f6f6f6]">
             <div className="group relative overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1676727294026-5c5a4a7c3d75?w=1200"
+                src="https://images.unsplash.com/photo-1676299081847-824916de030a?auto=format&fit=crop&w=1200&q=80"
                 className="h-[300px] w-full object-cover transition duration-500 group-hover:scale-105"
                 alt="AI Podcast Generator"
               />
-              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-6 left-6 text-white">
                 <h4 className="text-3xl font-semibold">AI Podcast Generator</h4>
               </div>
@@ -344,11 +342,11 @@ export default function Home() {
           <div className="overflow-hidden rounded-[36px] bg-[#f6f6f6]">
             <div className="group relative overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200"
+                src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
                 className="h-[280px] w-full object-cover transition duration-500 group-hover:scale-105"
                 alt="AI Podcast Builder"
               />
-              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-6 left-6 text-white">
                 <h4 className="text-3xl font-semibold">AI Podcast Builder</h4>
               </div>
@@ -365,11 +363,11 @@ export default function Home() {
           <div className="overflow-hidden rounded-[36px] bg-[#f6f6f6]">
             <div className="group relative overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1679060951013-c0e4fda6734b?w=1200"
+                src="https://images.unsplash.com/photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80"
                 className="h-[280px] w-full object-cover transition duration-500 group-hover:scale-105"
                 alt="AI Tool Navigator"
               />
-              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-6 left-6 text-white">
                 <h4 className="text-3xl font-semibold">AI Tool Navigator</h4>
               </div>
