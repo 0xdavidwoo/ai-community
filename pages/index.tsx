@@ -124,14 +124,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-black px-6 py-20 text-white sm:px-14">
-        <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <section className="bg-[#f3f3f3] px-6 py-20 text-black sm:px-14">
+        <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between text-black">
           <div>
-            <p className="text-sm text-white/60">Featured Skills</p>
+            <p className="text-sm text-gray-400">Featured Skills</p>
             <h3 className="mt-2 text-4xl font-semibold">Skills 工具箱</h3>
           </div>
 
-          <p className="max-w-2xl text-sm text-white/70">
+          <p className="max-w-2xl text-sm text-gray-500">
             从启动项目到业务落地，挑选最常用的六个 skill 入口，直接进入对应页面开始使用。
           </p>
         </div>
@@ -141,11 +141,11 @@ export default function Home() {
             <Link
               key={skill.href}
               href={skill.href}
-              className="rounded-[28px] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:bg-white/10"
+              className="rounded-[28px] bg-white p-6 transition hover:shadow-md hover:-translate-y-1"
             >
               <div className="text-3xl">{skill.emoji}</div>
               <h4 className="mt-4 text-2xl font-semibold">{skill.title}</h4>
-              <p className="mt-3 text-sm leading-6 text-white/70">
+              <p className="mt-3 text-sm leading-6 text-gray-500">
                 {skill.description}
               </p>
             </Link>
