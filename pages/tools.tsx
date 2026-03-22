@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import Link from 'next/link'
 
+import Navbar from '../components/Navbar'
+
 const TOOLS = [
   { name: 'ChatGPT', description: 'AI 写作、编程、问答助手', link: 'https://chat.openai.com', tag: '对话' },
   { name: 'Claude', description: '长文档分析和代码生成', link: 'https://claude.ai', tag: '对话' },
@@ -23,18 +25,7 @@ export default function ToolsPage() {
         <meta name="description" content="社区常用 AI 工具收录" />
       </Head>
       <main className="min-h-screen bg-[#f3f3f3] text-black">
-        <div className="flex justify-between items-center px-14 py-8 bg-white border-b border-gray-100">
-          <Link href="/" className="text-xl font-semibold">AI Forge · 造物社</Link>
-          <div className="flex gap-10 text-sm">
-            <Link href="/feed">内容精选</Link>
-            <Link href="/tools" className="font-semibold">工具</Link>
-            <Link href="/skills">Skills</Link>
-            <a href="#">社区</a>
-          </div>
-          <Link href="/login">
-            <button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button>
-          </Link>
-        </div>
+        <Navbar />
         <div className="max-w-5xl mx-auto px-6 py-12">
           <p className="text-sm text-gray-400 mb-2">探索</p>
           <h1 className="text-4xl font-semibold mb-2">AI 工具目录</h1>

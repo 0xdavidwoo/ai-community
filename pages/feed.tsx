@@ -1,5 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
+
+import Navbar from '../components/Navbar'
 import type { GetServerSideProps } from 'next'
 import { createClient } from '@supabase/supabase-js'
 
@@ -38,18 +40,7 @@ export default function FeedPage({ articles, fetchError }: FeedPageProps) {
       </Head>
       <main className="min-h-screen bg-[#f3f3f3] text-black">
 
-        {/* 导航栏 */}
-        <div className="flex justify-between items-center px-14 py-8 bg-white border-b border-gray-100">
-          <Link href="/" className="text-xl font-semibold">AI Forge · 造物社</Link>
-          <div className="flex gap-10 text-sm">
-            <Link href="/feed" className="font-semibold">内容精选</Link>
-            <a href="#">工具</a>
-            <a href="#">社区</a>
-          </div>
-          <Link href="/login">
-            <button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button>
-          </Link>
-        </div>
+        <Navbar />
 
         <div className="max-w-4xl mx-auto px-6 py-12">
 
