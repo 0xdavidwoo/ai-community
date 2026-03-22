@@ -1,25 +1,119 @@
+import { useState } from 'react'
+
+const navLinks = [
+  { href: '/feed', label: '内容精选' },
+  { href: '/skills', label: 'Skills' },
+  { href: '/tools', label: '工具' },
+  { href: '#', label: '社区' },
+]
+
+const skillCards = [
+  {
+    href: '/skills/ai-start',
+    emoji: '🚀',
+    title: 'AI Start',
+    description: '快速梳理从想法到落地的 AI 项目启动路径。',
+  },
+  {
+    href: '/skills/ai-builder',
+    emoji: '🛠️',
+    title: 'AI Builder',
+    description: '为产品原型、自动化流程和功能搭建提供方法。',
+  },
+  {
+    href: '/skills/evaluate',
+    emoji: '📊',
+    title: 'Evaluate',
+    description: '建立评估标准，验证模型、提示词和工作流效果。',
+  },
+  {
+    href: '/skills/business',
+    emoji: '💼',
+    title: 'Business',
+    description: '把 AI 能力转成业务价值、服务方案和增长机会。',
+  },
+  {
+    href: '/skills/website',
+    emoji: '🌐',
+    title: 'Website',
+    description: '搭建官网、落地页与清晰的信息架构。',
+  },
+  {
+    href: '/skills/content',
+    emoji: '✍️',
+    title: 'Content',
+    description: '生成选题、内容框架与多渠道发布素材。',
+  },
+]
+
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
     <main className="overflow-x-hidden bg-[#f3f3f3] text-black">
       {/* NAVBAR */}
-      <div className="flex items-center justify-between px-6 py-8 sm:px-14">
-        <h1 className="text-xl font-semibold">AI Forge</h1>
+      <div className="relative px-6 py-8 sm:px-14">
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="text-xl font-semibold">AI Forge</h1>
 
-        <div className="hidden gap-10 text-sm sm:flex">
-          <a href="/feed">内容精选</a>
-          <a href="/skills">Skills</a>
-          <a href="/tools">工具</a>
-          <a href="#">社区</a>
+          <div className="hidden gap-10 text-sm sm:flex">
+            {navLinks.map((link) => (
+              <a key={link.label} href={link.href}>
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white sm:hidden"
+              aria-label={isMenuOpen ? '关闭菜单' : '打开菜单'}
+              aria-expanded={isMenuOpen}
+              onClick={() => setIsMenuOpen((open) => !open)}
+            >
+              <span className="flex flex-col gap-1.5">
+                <span className="h-0.5 w-5 rounded-full bg-black" />
+                <span className="h-0.5 w-5 rounded-full bg-black" />
+                <span className="h-0.5 w-5 rounded-full bg-black" />
+              </span>
+            </button>
+
+            <button className="hidden rounded-full bg-black px-6 py-2 text-sm text-white sm:block">
+              Join
+            </button>
+          </div>
         </div>
 
-        <button className="rounded-full bg-black px-6 py-2 text-sm text-white">
-          Join
-        </button>
+        {isMenuOpen && (
+          <div className="fixed inset-x-0 top-0 z-50 bg-black px-6 pb-8 pt-24 text-white shadow-2xl sm:hidden">
+            <button
+              type="button"
+              className="absolute right-6 top-8 text-sm text-white/80"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              关闭
+            </button>
+
+            <nav className="flex flex-col gap-4 text-lg">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="rounded-2xl border border-white/10 px-5 py-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
       </div>
 
       {/* HERO + CARD GRID */}
-      <section className="grid auto-rows-[260px] gap-6 px-6 pb-16 md:grid-cols-3 sm:px-14">
-        <div className="row-span-2 flex flex-col justify-between rounded-[40px] bg-[#ff6b6b] p-8 text-white sm:p-12 md:col-span-2">
+      <section className="grid gap-6 px-6 pb-16 sm:px-14 md:auto-rows-[210px] md:grid-cols-3 lg:auto-rows-[220px]">
+        <div className="flex min-h-[320px] flex-col justify-between rounded-[40px] bg-[#ff6b6b] p-8 text-white sm:p-12 md:col-span-2 md:row-span-2 md:min-h-0">
           <div>
             <h2 className="text-4xl font-semibold leading-tight sm:text-6xl">
               Build AI
@@ -35,12 +129,12 @@ export default function Home() {
             </p>
           </div>
 
-          <button className="w-fit rounded-full bg-white px-6 py-3 text-black">
+          <button className="mt-8 w-fit rounded-full bg-white px-6 py-3 text-black">
             Start Exploring
           </button>
         </div>
 
-        <div className="group relative overflow-hidden rounded-[32px]">
+        <div className="group relative min-h-[260px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
             src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
@@ -52,7 +146,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between rounded-[32px] bg-[#ffd93d] p-8">
+        <div className="flex min-h-[220px] flex-col justify-between rounded-[32px] bg-[#ffd93d] p-8 md:min-h-0">
           <h3 className="text-2xl font-semibold">Discover AI Tools</h3>
 
           <p className="text-sm">
@@ -60,7 +154,15 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="group relative overflow-hidden rounded-[32px] md:row-span-2">
+        <div className="flex min-h-[220px] flex-col justify-between rounded-[32px] bg-[#6bcb77] p-8 md:min-h-0">
+          <h3 className="text-2xl font-semibold">Community</h3>
+
+          <p className="text-sm">
+            Join builders creating AI startups and side projects.
+          </p>
+        </div>
+
+        <div className="group relative min-h-[280px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
             src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
@@ -72,15 +174,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between rounded-[32px] bg-[#6bcb77] p-8">
-          <h3 className="text-2xl font-semibold">Community</h3>
-
-          <p className="text-sm">
-            Join builders creating AI startups and side projects.
-          </p>
-        </div>
-
-        <div className="group relative overflow-hidden rounded-[32px]">
+        <div className="group relative min-h-[220px] overflow-hidden rounded-[32px] md:col-span-2 md:min-h-0">
           <img
             src="https://images.unsplash.com/photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
@@ -90,6 +184,36 @@ export default function Home() {
           <div className="absolute bottom-6 left-6 text-white">
             <h3 className="text-xl font-semibold">Weekly Sessions</h3>
           </div>
+        </div>
+      </section>
+
+      {/* SKILLS */}
+      <section className="bg-black px-6 py-20 text-white sm:px-14">
+        <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm text-white/60">Featured Skills</p>
+            <h3 className="mt-2 text-4xl font-semibold">Skills 工具箱</h3>
+          </div>
+
+          <p className="max-w-2xl text-sm text-white/70">
+            从启动项目到业务落地，挑选最常用的六个 skill 入口，直接进入对应页面开始使用。
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {skillCards.map((skill) => (
+            <a
+              key={skill.href}
+              href={skill.href}
+              className="rounded-[28px] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:bg-white/10"
+            >
+              <div className="text-3xl">{skill.emoji}</div>
+              <h4 className="mt-4 text-2xl font-semibold">{skill.title}</h4>
+              <p className="mt-3 text-sm leading-6 text-white/70">
+                {skill.description}
+              </p>
+            </a>
+          ))}
         </div>
       </section>
 
