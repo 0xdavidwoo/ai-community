@@ -1,7 +1,9 @@
+import { createClient } from '@supabase/supabase-js';
+import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import type { GetServerSideProps } from 'next';
-import { createClient } from '@supabase/supabase-js';
+
+import Navbar from '../../components/Navbar';
 
 type Article = {
   id: string;
@@ -39,12 +41,15 @@ export default function ArticleDetailPage({ article, fetchError }: ArticleDetail
           <meta name="description" content="The requested article could not be loaded." />
         </Head>
 
-        <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100 sm:px-6">
-          <div className="mx-auto max-w-3xl rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
-            <p className="text-sm text-slate-300">{fetchError ?? 'Article not found.'}</p>
-            <Link href="/" className="mt-4 inline-block text-sm font-medium text-indigo-300 hover:text-indigo-200">
-              ← Back to feed
-            </Link>
+        <main className="min-h-screen bg-slate-950 text-slate-100">
+          <Navbar />
+          <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
+              <p className="text-sm text-slate-300">{fetchError ?? 'Article not found.'}</p>
+              <Link href="/" className="mt-4 inline-block text-sm font-medium text-indigo-300 hover:text-indigo-200">
+                ← Back to feed
+              </Link>
+            </div>
           </div>
         </main>
       </>
@@ -58,22 +63,25 @@ export default function ArticleDetailPage({ article, fetchError }: ArticleDetail
         <meta name="description" content={article.content.slice(0, 140)} />
       </Head>
 
-      <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100 sm:px-6">
-        <article className="mx-auto max-w-3xl rounded-2xl border border-slate-800 bg-slate-900/70 p-6 sm:p-8">
-          <Link href="/" className="text-sm font-medium text-indigo-300 hover:text-indigo-200">
-            ← Back to feed
-          </Link>
+      <main className="min-h-screen bg-slate-950 text-slate-100">
+        <Navbar />
+        <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+          <article className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 sm:p-8">
+            <Link href="/" className="text-sm font-medium text-indigo-300 hover:text-indigo-200">
+              ← Back to feed
+            </Link>
 
-          <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-slate-300">
-            <span className="rounded-full bg-indigo-500/20 px-3 py-1 font-semibold uppercase tracking-wide text-indigo-200">
-              {article.category}
-            </span>
-            <time dateTime={article.published_at}>{formatPublishedDate(article.published_at)}</time>
-          </div>
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-slate-300">
+              <span className="rounded-full bg-indigo-500/20 px-3 py-1 font-semibold uppercase tracking-wide text-indigo-200">
+                {article.category}
+              </span>
+              <time dateTime={article.published_at}>{formatPublishedDate(article.published_at)}</time>
+            </div>
 
-          <h1 className="mt-4 text-2xl font-bold leading-tight text-white sm:text-3xl">{article.title}</h1>
-          <p className="mt-6 whitespace-pre-line text-base leading-7 text-slate-200">{article.content}</p>
-        </article>
+            <h1 className="mt-4 text-2xl font-bold leading-tight text-white sm:text-3xl">{article.title}</h1>
+            <p className="mt-6 whitespace-pre-line text-base leading-7 text-slate-200">{article.content}</p>
+          </article>
+        </div>
       </main>
     </>
   );

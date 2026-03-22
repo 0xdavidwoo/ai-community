@@ -1,5 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
+
+import Navbar from '../../components/Navbar'
 import { useState } from 'react'
 
 const META: Record<string, {title: string; desc: string; placeholder: string; emoji: string; color: string}> = {
@@ -35,15 +37,7 @@ export default function SkillPage() {
     <>
       <Head><title>{meta.title} · AI Forge</title></Head>
       <main className="min-h-screen bg-[#f3f3f3] text-black">
-        <div className="flex justify-between items-center px-14 py-8 bg-white border-b border-gray-100">
-          <Link href="/" className="text-xl font-semibold">AI Forge · 造物社</Link>
-          <div className="flex gap-10 text-sm">
-            <Link href="/feed">内容精选</Link>
-            <Link href="/tools">工具</Link>
-            <Link href="/skills" className="font-semibold">Skills</Link>
-          </div>
-          <Link href="/login"><button className="bg-black text-white px-6 py-2 rounded-full text-sm">加入</button></Link>
-        </div>
+        <Navbar />
         <div className="max-w-3xl mx-auto px-6 py-12">
           <Link href="/skills" className="text-sm text-gray-400 hover:text-black transition">← 返回 Skills</Link>
           <div className="mt-6 w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{backgroundColor: meta.color}}>{meta.emoji}</div>
