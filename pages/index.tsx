@@ -70,7 +70,7 @@ export default function Home() {
 
         <div className="group relative min-h-[260px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=formatphoto-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80fit=cropphoto-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80w=1200photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="AI Experiments"
           />
@@ -99,7 +99,7 @@ export default function Home() {
 
         <div className="group relative min-h-[280px] overflow-hidden rounded-[32px] md:row-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=formatphoto-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80fit=cropphoto-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80w=1200photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="Builder Projects"
           />
@@ -112,7 +112,7 @@ export default function Home() {
 
         <div className="group relative min-h-[220px] overflow-hidden rounded-[32px] md:col-span-2 md:min-h-0">
           <img
-            src="https://images.unsplash.com/photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=formatphoto-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80fit=cropphoto-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80w=1200photo-1677442135136-760c813028c0?auto=format&fit=crop&w=1200&q=80q=80"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             alt="Weekly Sessions"
           />
@@ -163,7 +163,7 @@ export default function Home() {
           <div className="overflow-hidden rounded-[36px] bg-[#f6f6f6]">
             <div className="group relative overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1676299081847-824916de030a?auto=format&fit=crop&w=1200&q=80"
+                src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=formatphoto-1676299081847-824916de030a?auto=format&fit=crop&w=1200&q=80fit=cropphoto-1676299081847-824916de030a?auto=format&fit=crop&w=1200&q=80w=1200photo-1676299081847-824916de030a?auto=format&fit=crop&w=1200&q=80q=80"
                 className="h-[300px] w-full object-cover transition duration-500 group-hover:scale-105"
                 alt="AI Podcast Generator"
               />
