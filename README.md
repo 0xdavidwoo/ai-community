@@ -51,7 +51,7 @@ This project is a mobile-first MVP built with **Next.js + Tailwind CSS**, struct
 - `/` homepage feed with category filters, article cards, and load more
 - `/article/[id]` article detail page
 - `/profile` personal center page
-- `/login` phone login page
+- `/login` 邮箱 Magic Link 登录页
 
 ## Supabase setup
 
@@ -60,6 +60,7 @@ To connect real data, configure:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Supabase Dashboard → Authentication → URL Configuration → `Site URL` 设置为 `https://www.aiforge.im`（用于邮箱登录回跳）
 
 ## Local development
 
