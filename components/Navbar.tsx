@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import supabase from '../lib/supabaseClient'
 
 const navLinks = [
   { href: '/feed', label: '内容精选' },
@@ -9,17 +10,44 @@ const navLinks = [
   { href: '/#community', label: '社区' },
 ]
 
-const mobileLinks = [...navLinks, { href: '/login', label: '加入' }]
-
 export default function Navbar() {
   const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const syncSession = async () => {
+      if (!supabase) {
+        setIsLoggedIn(false)
+        return
+      }
+
+      const { data } = await supabase.auth.getSession()
+      setIsLoggedIn(Boolean(data.session))
+    }
+
+    void syncSession()
+
+    if (!supabase) return
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(Boolean(session))
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
 
   const isActive = (href: string) => {
     if (href === '/#community') return false
     if (href === '/') return router.pathname === '/'
     return router.pathname === href || router.pathname.startsWith(`${href}/`)
   }
+
+  const entryLink = isLoggedIn ? { href: '/profile', label: '我的' } : { href: '/login', label: '加入' }
+  const mobileLinks = [...navLinks, entryLink]
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur">
@@ -41,10 +69,10 @@ export default function Navbar() {
         </nav>
 
         <Link
-          href="/login"
+          href={entryLink.href}
           className="hidden rounded-full bg-black px-6 py-2 text-sm text-white transition hover:bg-black/85 md:inline-flex"
         >
-          加入
+          {entryLink.label}
         </Link>
 
         <button
@@ -74,7 +102,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={link.label === '加入' ? 'rounded-full bg-black px-8 py-3 text-white' : ''}
+                className={link.label === entryLink.label ? 'rounded-full bg-black px-8 py-3 text-white' : ''}
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
