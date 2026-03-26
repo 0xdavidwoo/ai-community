@@ -1,74 +1,110 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import supabase from '../lib/supabaseClient';
+import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+
+import Navbar from '../components/Navbar'
+import supabase from '../lib/supabaseClient'
+
+type UserProfile = {
+  email: string
+  createdAt: string
+}
+
+function formatRegisterTime(isoDate?: string) {
+  if (!isoDate) return '未知'
+  const date = new Date(isoDate)
+  if (Number.isNaN(date.getTime())) return isoDate
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 
 export default function ProfilePage() {
-  const router = useRouter();
-  const [phone, setPhone] = useState('');
-  const [loading, setLoading] = useState(true);
+  const router = useRouter()
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchUser = async () => {
       if (!supabase) {
-        await router.replace('/login');
-        return;
+        await router.replace('/login')
+        return
       }
 
-      const { data, error } = await supabase.auth.getUser();
+      const { data, error } = await supabase.auth.getUser()
       if (error || !data.user) {
-        await router.replace('/login');
-        return;
+        await router.replace('/login')
+        return
       }
 
-      setPhone(data.user.phone || '未绑定手机号');
-      setLoading(false);
-    };
+      setProfile({
+        email: data.user.email || '未绑定邮箱',
+        createdAt: formatRegisterTime(data.user.created_at)
+      })
+      setLoading(false)
+    }
 
-    void fetchUser();
-  }, [router]);
+    void fetchUser()
+  }, [router])
 
   const handleSignOut = async () => {
     if (!supabase) {
-      await router.push('/');
-      return;
+      await router.push('/')
+      return
     }
 
-    await supabase.auth.signOut();
-    await router.push('/');
-  };
+    await supabase.auth.signOut()
+    await router.push('/')
+  }
 
   return (
     <>
       <Head>
-        <title>Profile | AI Forge</title>
-        <meta name="description" content="Personal center for AI Forge (造物社) members" />
+        <title>个人中心 · AI Forge</title>
+        <meta name="description" content="AI Forge 用户个人中心" />
       </Head>
-      <main className="min-h-screen bg-[#f3f3f3] px-4 py-8 text-slate-900 sm:px-6 sm:py-12">
-        <section className="mx-auto max-w-3xl rounded-2xl bg-white p-6 sm:p-8">
-          <h1 className="text-2xl font-bold">Personal Center</h1>
-          <p className="mt-2 text-sm text-slate-600">查看账号信息并管理登录状态。</p>
+      <main className="min-h-screen bg-[#f3f3f3] text-black">
+        <Navbar />
 
-          <div className="mt-6 rounded-xl bg-slate-100 p-4">
-            <p className="text-xs uppercase tracking-wide text-slate-500">Phone</p>
-            <p className="mt-2 text-xl font-semibold">{loading ? '加载中...' : phone}</p>
+        <section className="mx-auto max-w-3xl px-6 py-12">
+          <div className="rounded-[24px] bg-white p-7 sm:p-8">
+            <h1 className="text-3xl font-semibold">个人中心</h1>
+            <p className="mt-2 text-sm text-gray-500">查看你的账号信息并管理登录状态。</p>
+
+            <div className="mt-8 grid gap-4">
+              <div className="rounded-2xl bg-[#f3f3f3] p-5">
+                <p className="text-xs text-gray-500">邮箱</p>
+                <p className="mt-2 text-lg font-semibold">{loading ? '加载中...' : profile?.email}</p>
+              </div>
+
+              <div className="rounded-2xl bg-[#f3f3f3] p-5">
+                <p className="text-xs text-gray-500">注册时间</p>
+                <p className="mt-2 text-lg font-semibold">{loading ? '加载中...' : profile?.createdAt}</p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="mt-8 rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition hover:bg-black/85 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={handleSignOut}
+              disabled={loading}
+            >
+              退出登录
+            </button>
+
+            <div>
+              <Link href="/" className="mt-8 inline-block text-sm font-medium text-indigo-700 hover:text-indigo-600">
+                ← 返回首页
+              </Link>
+            </div>
           </div>
-
-          <button
-            type="button"
-            className="mt-6 rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black/85"
-            onClick={handleSignOut}
-            disabled={loading}
-          >
-            退出登录
-          </button>
-
-          <Link href="/" className="mt-8 inline-block text-sm font-medium text-indigo-700 hover:text-indigo-600">
-            ← Back to feed
-          </Link>
         </section>
       </main>
     </>
-  );
+  )
 }
